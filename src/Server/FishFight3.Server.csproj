@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Use WinExe to hide the console window on launch; use Exe for debugging -->
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    
+    <!-- Optimization: Enables modern C# features like Interop improvements -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    
+    <!-- Rollback performance: Aggressive optimization for the JIT compiler -->
+    <Optimization>true</Optimization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Core SFML Bindings -->
+    
+    <!-- JSON handling for your hot-swappable Character Sheets -->
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    
+    <!-- Optional: High-performance Networking for P2P -->
+    <PackageReference Include="LiteNetLib" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Automatically copy your JSON Character Sheets to the build folder -->
+    <None Update="Data\Characters\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    
+    <!-- Ensure SFML native DLLs are in the output if not handled by NuGet -->
+    <None Update="csfml-*.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
