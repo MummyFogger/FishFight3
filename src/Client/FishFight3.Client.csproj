@@ -16,10 +16,14 @@
 
   <ItemGroup>
     <!-- Core SFML Bindings -->
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.5" />
     <PackageReference Include="SFML.Net" Version="3.0.0" />
     
     <!-- JSON handling for your hot-swappable Character Sheets -->
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="System.Text.Json" Version="10.0.5" />
     
     <!-- Optional: High-performance Networking for P2P -->
   </ItemGroup>
@@ -37,13 +41,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Input\" />
-    <Folder Include="Assets\" />
+    <ProjectReference Include="..\Core\FishFight3.Core.csproj" />
+    <ProjectReference Include="..\Networking\FishFight3.Networking.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\FishFight3.Core.csproj" />
-    <ProjectReference Include="..\Networking\FishFight3.Networking.csproj" />
+    <Folder Include="Options\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

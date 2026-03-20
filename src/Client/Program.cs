@@ -1,47 +1,56 @@
-﻿using FishFight3.Client.Infrastructure;
-using FishFight3.Client.SFML;
+﻿using FishFight3.Client.SFML;
 using FishFight3.Core.Engine;
 using FishFight3.Core.Input;
 using FishFight3.Core.Physics;
 using FishFight3.Core.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System.Xml;
 
 namespace FishFight3.Client
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            ConsoleLogger logger = new();
-            ISimulation simulation = new LogConsoleSimulation(logger);
-            IRenderer renderer = new SfmlRenderer(logger);
-            ITimeProvider timeProvider = new SfmlTimeProvider();
-            IGameWindow gameWindow = new SfmlGameWindow(1366, 768, "MyGame", logger);
-            InputMapping p1Im = new(); // Default
-            InputMapping p2Im = new()
-            {
-                Up = "Up",
-                Down = "Down",
-                Left = "Left",
-                Right = "Right",
-                Light = "Numpad1",
-                Medium = "Numpad2",
-                Heavy = "Numpad3",
-                Special = "Numpad4",
-                Dash = "Numpad5",
-                Meter = "Numpad6",
-                Break = "Numpad7",
-                Taunt = "Numpad8"
-            };
-            IInputProvider p1Input = new SfmlInputProvider(p1Im, logger);
-            IInputProvider p2Input = new SfmlInputProvider(p2Im, logger);
-            var gameLoop = new GameLoop(simulation, renderer, timeProvider, gameWindow, p1Input, p2Input, logger);
+            var builder = Host.CreateApplicationBuilder(args);
 
+            // Options
+            builder.Services.Configure<InputSettings>("keyboard",
+                builder.Configuration.GetSection("Input:Keyboard"));
+            builder.Services.PostConfigure<InputSettings>("Keyboard",
+                options => options.Sanitize(DefaultInputMappings.KeyboardGameplay));
+
+            builder.Services.Configure<GameSettings>(builder.Configuration.GetSection("GameSettings"));
+
+            // Register services
+            builder.Services.AddSingleton<SfmlClientWindow>();
+            builder.Services.AddSingleton<IGameWindow>(sp => sp.GetRequiredService<SfmlClientWindow>());
+            builder.Services.AddSingleton<IRenderer, SfmlRenderer>();
+            builder.Services.AddTransient<ITimeProvider, SfmlTimeProvider>();
+            builder.Services.AddTransient<ISimulation, LogConsoleSimulation>();
+            builder.Services.AddSingleton<IInputProvider, SfmlKeyboardInputProvider>();
+            //builder.Services.AddSingleton<VisualEffectQueue>();
+            //builder.Services.AddHostedService<ParticleSimulationWorker>();
+
+            builder.Services.AddSingleton<GameLoop>();
+
+            // 3. Build the Host
+            using IHost host = builder.Build();
+
+            // 4. Start Background Services (Non-blocking)
+            await host.StartAsync();
+
+            // 5. The Main Thread Game Loop
+            var logger = host.Services.GetRequiredService<ILogger<Program>>();
+
+            var gameLoop = host.Services.GetRequiredService<GameLoop>();
             gameLoop.Run();
+
+            // 6. Graceful Shutdown
+            logger.LogInformation("Shutting down...");
+            await host.StopAsync();
         }
     }
 }

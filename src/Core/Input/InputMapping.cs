@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FishFight3.Core.State;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,32 +8,68 @@ using System.Threading.Tasks;
 
 namespace FishFight3.Core.Input
 {
-    public class InputMapping
+    public class InputSettings
     {
-        // Directions
-        public string Up { get; set; } = "W";
-        public string Down { get; set; } = "S";
-        public string Left { get; set; } = "A";
-        public string Right { get; set; } = "D";
+        public Dictionary<string, string> InputMappings { get; set; } = [];
+        public void Sanitize(Dictionary<string, string> defaultMappings)
+        {
+            // Remove invalid actions
+            //     Null / Whitespace
+            //     Cannot be parsed to Direction or ButtonBitmask
+            var invalidKeys = InputMappings
+                .Where(kvp => string.IsNullOrWhiteSpace(kvp.Value) || !Enum.TryParse<ButtonBitmask>(kvp.Value, false, out var _))
+                .Select(kvp => kvp.Key).ToList();
+            foreach (var key in invalidKeys) InputMappings.Remove(key);
 
-        // Buttons (mapped to your ButtonMask bits)
-        public string Light { get; set; } = "J";
-        public string Medium { get; set; } = "K";
-        public string Heavy { get; set; } = "L";
-        public string Special { get; set; } = "U";
-        public string Dash { get; set; } = "Space";
-        public string Meter { get; set; } = "I";
-        public string Break { get; set; } = "O";
-        public string Taunt { get; set; } = "P";
+            // Add default mappings for any actions that aren't mapped to ANY key in the JSON
+            foreach (var (defaultKey, action) in defaultMappings)
+            {
+                // If the action (e.g. "Jump") isn't mapped to ANY key in the JSON...
+                if (!InputMappings.ContainsValue(action))
+                {
+                    // ...add the default mapping
+                    InputMappings[defaultKey] = action;
+                }
+            }
+        }
+    }
 
-        // Additional buttons can be added as needed, up to 16 total for the ButtonBitmask
-        public string Button8 { get; set; } = "Num1";
-        public string Button9 { get; set; } = "Num2";
-        public string Button10 { get; set; } = "Num3";
-        public string Button11 { get; set; } = "Num4";
-        public string Button12 { get; set; } = "Num5";
-        public string Button13 { get; set; } = "Num6";
-        public string Button14 { get; set; } = "Num7";
-        public string Button15 { get; set; } = "Num8";
+    public static class DefaultInputMappings
+    {
+        public static readonly Dictionary<string, string> KeyboardMenu = new()
+        {
+            { "w", "Up" },
+            { "a", "Left" },
+            { "s", "Down" },
+            { "d" , "Right" },
+            { "j" , "Light" },
+            { "k" , "Medium" },
+            { "l" , "Heavy" },
+            { "u" , "Special" },
+            { "space" , "Dash" },
+            { "i" , "Meter" },
+            { "o" , "Break" },
+            { "p" , "Taunt" },
+            { "enter", "Start" },
+            { "tab", "Select" }
+        };
+
+        public static readonly Dictionary<string, string> KeyboardGameplay = new()
+        {
+            { "w", "Up" },
+            { "a", "Left" },
+            { "s", "Down" },
+            { "d" , "Right" },
+            { "j" , "Light" },
+            { "k" , "Medium" },
+            { "l" , "Heavy" },
+            { "u" , "Special" },
+            { "space" , "Dash" },
+            { "i" , "Meter" },
+            { "o" , "Break" },
+            { "p" , "Taunt" },
+            { "enter", "Start" },
+            { "tab", "Select" }
+        };
     }
 }

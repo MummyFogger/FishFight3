@@ -2,22 +2,22 @@
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace FishFight3.Client.SFML
 {
-    internal class SfmlGameWindow : IGameWindow
+    internal class SfmlClientWindow : IGameWindow
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<SfmlClientWindow> _logger;
         private readonly RenderWindow _window;
 
-        public SfmlGameWindow(uint width, uint height, string title, ILogger logger)
+        public SfmlClientWindow(IOptions<GameSettings> settings, ILogger<SfmlClientWindow> logger)
         {
-            Vector2u windowSize = new Vector2u(width, height);
+            int width = settings.Value.WindowWidth;
+            int height = settings.Value.WindowHeight;
+            string title = settings.Value.WindowTitle;
+            Vector2u windowSize = new(Convert.ToUInt32(width), Convert.ToUInt32(height));
             _window = new RenderWindow(new VideoMode(windowSize), title);
             _window.SetVerticalSyncEnabled(true);
             _logger = logger;

@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FishFight3.Core.State;
 
 namespace FishFight3.Core.Input
 {
+    public enum MappingMode
+    {
+        Gameplay,
+        Menu,
+        None
+    }
+
     public interface IInputProvider
     {
-        public PlayerInput GetInput(int frame);
+        public InputState GetInput();
+        public void SetMappingMode(MappingMode mode);
     }
 }

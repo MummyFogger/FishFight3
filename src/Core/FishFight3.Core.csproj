@@ -6,6 +6,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<!-- Allows for the Unsafe.CopyBlock for snapshoting and restoring game state for rollback -->
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     
     <!-- Optimization: Enables modern C# features like Interop improvements -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -18,7 +20,9 @@
     <!-- Core SFML Bindings -->
     
     <!-- JSON handling for your hot-swappable Character Sheets -->
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="ICSharpCode.Decompiler" Version="9.1.0.7988" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.5" />
+    <PackageReference Include="System.Text.Json" Version="10.0.5" />
     
     <!-- Optional: High-performance Networking for P2P -->
   </ItemGroup>
