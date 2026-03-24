@@ -1,17 +1,15 @@
-﻿using FishFight3.Core.Engine;
-using FishFight3.Core.Input;
+﻿using FishFight3.Core.Input;
 using FishFight3.Core.State;
 using SFML.Window;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace FishFight3.Client.SFML
 {
     internal class SfmlKeyboardInputProvider : IInputProvider
     {
         private readonly ILogger<SfmlKeyboardInputProvider> _logger;
-        private readonly Dictionary<string, string> _gameplayInputMapping;
+        private readonly Dictionary<string, string> _simulationInputMapping;
         private InputState _currentInput;
         private MappingMode _mappingMode;
 
@@ -26,12 +24,12 @@ namespace FishFight3.Client.SFML
 
             if (mapping == null)
             {
-                _logger.LogError($"No input mapping found for 'keyboard'. Defaulting to empty mapping.");
-                _gameplayInputMapping = DefaultInputMappings.KeyboardGameplay;
+                _logger.LogError("No input mapping found for 'keyboard'. Defaulting to empty mapping.");
+                _simulationInputMapping = DefaultInputMappings.KeyboardGameplay;
             }
             else
             {
-                _gameplayInputMapping = mapping;
+                _simulationInputMapping = mapping;
             }
 
             window.GetInternalWindow().KeyPressed += (s, e) => HandleKey(e.Code, true);
@@ -44,8 +42,8 @@ namespace FishFight3.Client.SFML
 
             switch (_mappingMode)
             {
-                case MappingMode.Gameplay:
-                    if (_gameplayInputMapping.TryGetValue(keyName, out var gameplayAction))
+                case MappingMode.Simulation:
+                    if (_simulationInputMapping.TryGetValue(keyName, out var gameplayAction))
                     {
                         _currentInput.SetAction(gameplayAction, isPressed);
                     }

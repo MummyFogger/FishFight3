@@ -1,10 +1,11 @@
 ﻿using FishFight3.Core.State;
 
-namespace FishFight3.Core.Physics
+namespace FishFight3.Core.Simulation
 {
     public interface ISimulation
     {
-        public SimulationState Update(ReadOnlySpan<InputState> inputStates);
+        public void Update(ReadOnlySpan<InputState> inputStates);
         public SimulationState GetState();
+        public EffectState GetEffectState();
     }
 }

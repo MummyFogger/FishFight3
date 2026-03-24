@@ -4,7 +4,7 @@ namespace FishFight3.Core.Input
 {
     public enum MappingMode
     {
-        Gameplay,
+        Simulation,
         Menu,
         None
     }

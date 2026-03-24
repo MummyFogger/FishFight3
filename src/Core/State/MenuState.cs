@@ -14,34 +14,26 @@ namespace FishFight3.Core.State
         TransitionFrom
     }
 
-    public enum MenuType
-    {
-        MainMenu,
-        Options,
-        SplashScreen,
-        StartScreen,
-        LoadingScreen
-    }
-
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct MenuState
     {
-        public MenuState(MenuType menu)
+        public MenuState()
         {
-            MenuType = menu;
             StateType = MenuStateType.TransitionTo;
-            CursorIndex = 0;
+            P1CursorIndex = 0;
+            P2CursorIndex = 0;
+            P3CursorIndex = 0;
+            P4CursorIndex = 0;
             FrameCounter = 0;
             KeyboardActive = true;
         }
 
-        public readonly MenuType MenuType;
         public MenuStateType StateType;
-        public int CursorIndex;
+        public int P1CursorIndex;
+        public int P2CursorIndex;
+        public int P3CursorIndex;
+        public int P4CursorIndex;
         public int FrameCounter; // Used for animations and transitions
         public bool KeyboardActive;
-        public MenuState()
-        {
-        }
     }
 }

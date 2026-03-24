@@ -10,6 +10,6 @@ namespace FishFight3.Core.Rendering
 {
     public interface IMenuRenderer
     {
-        public void Draw(IGameWindow gameWindow, MenuState menuState);
+        public void Draw(IGameWindow gameWindow, double alpha, MenuState menuState);
     }
 }

@@ -1,4 +1,4 @@
-﻿using FishFight3.Core.Engine;
+﻿using FishFight3.Core.Game;
 using SFML.System;
 
 namespace FishFight3.Client.SFML

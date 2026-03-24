@@ -7,7 +7,8 @@ namespace FishFight3.Core.State
         RoundStart,
         RoundOver,
         Playing,
-        Paused
+        Paused,
+        Ended
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]

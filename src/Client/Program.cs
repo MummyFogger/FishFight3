@@ -1,12 +1,13 @@
 ﻿using FishFight3.Client.SFML;
-using FishFight3.Core.Engine;
+using FishFight3.Core.Game;
 using FishFight3.Core.Input;
-using FishFight3.Core.Physics;
+using FishFight3.Core.Simulation;
 using FishFight3.Core.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Xml;
+using FishFight3.Core.Game.GameScreen;
 
 namespace FishFight3.Client
 {
@@ -27,11 +28,18 @@ namespace FishFight3.Client
             // Register services
             builder.Services.AddSingleton<SfmlClientWindow>();
             builder.Services.AddSingleton<IGameWindow>(sp => sp.GetRequiredService<SfmlClientWindow>());
-            builder.Services.AddSingleton<IRenderer, SfmlRenderer>();
-            builder.Services.AddTransient<ITimeProvider, SfmlTimeProvider>();
-            builder.Services.AddTransient<ISimulation, LogConsoleSimulation>();
+            builder.Services.AddSingleton<IMenuRenderer, SfmlMenuRenderer>();
+            builder.Services.AddSingleton<ISimulationRenderer, SfmlSimulationRenderer>();
             builder.Services.AddSingleton<IInputProvider, SfmlKeyboardInputProvider>();
             //builder.Services.AddSingleton<VisualEffectQueue>();
+
+            // Register transient
+            builder.Services.AddTransient<ITimeProvider, SfmlTimeProvider>();
+            builder.Services.AddTransient<StandardTwoPlayer>();
+            builder.Services.AddTransient<SplashScreen>();
+            builder.Services.AddTransient<SimulationScreen>();
+
+            // Register hosted services (background workers)
             //builder.Services.AddHostedService<ParticleSimulationWorker>();
 
             builder.Services.AddSingleton<GameLoop>();

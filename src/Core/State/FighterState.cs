@@ -37,5 +37,13 @@ namespace FishFight3.Core.State
         public FixedPointLong VelocityX = FixedPointLong.Zero;
         public FixedPointLong VelocityY = FixedPointLong.Zero;
         public int Health;
+
+        public readonly void AddInput(InputState input, uint currentFrame)
+        {
+            int index = (int)(currentFrame % INPUT_BUFFER_SIZE);
+            InputBuffer[index] = input;
+        }
+
+        public readonly InputState GetInput(uint frame) => InputBuffer[frame % INPUT_BUFFER_SIZE];
     }
 }
