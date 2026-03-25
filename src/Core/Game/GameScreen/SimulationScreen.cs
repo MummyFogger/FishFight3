@@ -50,7 +50,7 @@ namespace FishFight3.Core.Game.GameScreen
             if (_simulationState.StateType == SimulationStateType.Ended)
             {
                 _logger.LogInformation("Simulation ended. Returning to main menu.");
-                _gameLoop?.RequestScreenChange(GameScreenType.Splash);
+                _gameLoop.RequestScreenChange(GameScreenType.Splash);
             }
         }
 

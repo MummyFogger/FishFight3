@@ -54,5 +54,13 @@ namespace FishFight3.Core.State
             PressedButtons = ButtonBitmask.None;
             ReleasedButtons = ButtonBitmask.None;
         }
+
+        public static bool operator ==(InputState a, InputState b) => a.PressedButtons == b.PressedButtons && a.ReleasedButtons == b.ReleasedButtons;
+        public static bool operator !=(InputState a, InputState b) => !(a == b);
+        public static InputState operator &(InputState a, InputState b) => new() { PressedButtons = a.PressedButtons & b.PressedButtons, ReleasedButtons = a.ReleasedButtons & b.ReleasedButtons };
+        public readonly bool IsSubsetOf(InputState superSet) => (superSet & this) == this;
+        public readonly bool IsSupersetOf(InputState subSet) => (this & subSet) == subSet;
+        public override readonly bool Equals(object? obj) => obj is InputState other && this == other;
+        public override readonly int GetHashCode() => HashCode.Combine(PressedButtons, ReleasedButtons);
     }
 }

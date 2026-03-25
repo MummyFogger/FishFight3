@@ -7,20 +7,6 @@ using System.Threading.Tasks;
 
 namespace FishFight3.Core.State
 {
-    public enum FighterStateType : byte
-    {
-        Idle,
-        Walking,
-        Jumping,
-        Falling,
-        Crouching,
-        Attacking,
-        Blocking,
-        Hitstun,
-        Knockdown,
-        Teching
-    }
-
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct FighterState
     {
@@ -29,14 +15,19 @@ namespace FishFight3.Core.State
         public FighterState()
         {
         }
-
-        public FighterStateType StateType;
+        
         public readonly InputState[] InputBuffer = new InputState[INPUT_BUFFER_SIZE];
-        public FixedPointLong PositionX = FixedPointLong.Zero;
-        public FixedPointLong PositionY = FixedPointLong.Zero;
-        public FixedPointLong VelocityX = FixedPointLong.Zero;
-        public FixedPointLong VelocityY = FixedPointLong.Zero;
-        public int Health;
+        public FixedPointLong PositionX { get; set; } = FixedPointLong.Zero;
+        public FixedPointLong PositionY { get; set; } = FixedPointLong.Zero;
+        public FixedPointLong VelocityX { get; set; } = FixedPointLong.Zero;
+        public FixedPointLong VelocityY { get; set; } = FixedPointLong.Zero;
+        public required uint FighterId { get; init; } // Set to 0 means disabled
+        public required uint Health { get; set; }
+        public required uint Meter { get; set; }
+        public uint MoveId { get; set; } = 0; // MoveID 0 is reserved for Idle
+        public uint StageIndex { get; set; } = 0;
+        public uint StageFrame { get; set; } = 0;
+        public uint StunDuration { get; set; } = 0;
 
         public readonly void AddInput(InputState input, uint currentFrame)
         {
@@ -44,6 +35,6 @@ namespace FishFight3.Core.State
             InputBuffer[index] = input;
         }
 
-        public readonly InputState GetInput(uint frame) => InputBuffer[frame % INPUT_BUFFER_SIZE];
+        public readonly InputState? GetInput(uint frame) => InputBuffer[frame % INPUT_BUFFER_SIZE];
     }
 }

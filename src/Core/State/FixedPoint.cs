@@ -25,6 +25,10 @@ namespace FishFight3.Core.State
         public static FixedPointLong operator +(FixedPointLong a, FixedPointLong b) => new FixedPointLong(a._rawValue + b._rawValue);
         public static FixedPointLong operator -(FixedPointLong a, FixedPointLong b) => new FixedPointLong(a._rawValue - b._rawValue);
 
+        // Comparison
+        public static bool operator <(FixedPointLong a, FixedPointLong b) => a._rawValue < b._rawValue;
+        public static bool operator >(FixedPointLong a, FixedPointLong b) => a._rawValue > b._rawValue;
+
         // Multiplication: (a * b) / One to maintain scale
         public static FixedPointLong operator *(FixedPointLong a, FixedPointLong b)
         {
@@ -36,6 +40,7 @@ namespace FishFight3.Core.State
         {
             return new FixedPointLong((a._rawValue << Shift) / b._rawValue);
         }
+
 
         public override readonly string ToString() => ToFloat().ToString();
     }

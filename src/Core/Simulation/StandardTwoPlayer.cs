@@ -10,6 +10,8 @@ namespace FishFight3.Core.Simulation
 {
     public class StandardTwoPlayer : ISimulation
     {
+        // Dictionary of fighter ID to fighter table data
+        
         private readonly ILogger<StandardTwoPlayer> _logger;
         private SimulationState _simulationState;
         private EffectState _effectState;
@@ -26,6 +28,7 @@ namespace FishFight3.Core.Simulation
 
         public void Update(ReadOnlySpan<InputState> inputStates)
         {
+            // Add inputs to fighter state input buffer
             uint currentFrame = _simulationState.Frame;
             for (int i = 0; i < inputStates.Length; i++)
             {
@@ -43,6 +46,24 @@ namespace FishFight3.Core.Simulation
                         break;
                 }
             }
+
+            // Interpret inputs and update fighter move id state
+
+            // Update move timers i.e. state frame increment, advance stage, passives (meter gain?)
+
+            // Physics (move characters based on fighter state)
+
+            // PushBox resolution
+
+            // Hitbox collision detection
+
+            // Hitbox collision resolution
+            //   Attacker freeze frame???
+            //   Defender move id to hitstun/blockstun (don't forget to set stunDuration
+            //   Health
+
+            // Clean-up state (set facing direction, grounded check, etc.)
+
             _simulationState.Frame++;
         }
     }
